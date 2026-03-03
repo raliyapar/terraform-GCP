@@ -1,9 +1,15 @@
-provider "aws" {
-  region = "us-east-1"
+provider "google" {
+  project = var.project_id
+  region  = var.region
 }
 
-module "ec2_instance" {
-  source = "./modules/ec2_instance"
-  ami_value           = "ami-0b6c6ebed2801a5cb"
-  instance_type_value = "t3.micro"
+resource "google_project_service" "compute" {
+  service = "compute.googleapis.com"
+  disable_on_destroy = false
+  
+}
+
+resource "google_storage_bucket" "my_bucket" {
+  name     = "${var.project_id}-tf-bucket"
+  location = var.region  
 }
